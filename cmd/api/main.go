@@ -10,9 +10,12 @@ import (
 	"os"
 	"time"
 
+	"github.com/ChrisShia/moviehub/internal/data"
 	"github.com/ChrisShia/moviehub/internal/jsonlog"
 	_ "github.com/lib/pq"
 )
+
+const version = "1.0.0"
 
 type config struct {
 	port int
@@ -28,6 +31,7 @@ type config struct {
 type application struct {
 	config config
 	logger *jsonlog.Logger
+	models data.Models
 }
 
 func main() {
@@ -48,6 +52,7 @@ func main() {
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: data.NewModels(db),
 	}
 
 	srv := &http.Server{
@@ -64,7 +69,7 @@ func main() {
 		"addr": srv.Addr,
 	})
 	err = srv.ListenAndServe()
-	log.Println(err)
+	logger.PrintFatal(err, nil)
 }
 
 func (cfg *config) setFlags() {

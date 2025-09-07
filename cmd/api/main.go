@@ -7,8 +7,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/ChrisShia/moviehub/internal/jsonlog"
 	_ "github.com/lib/pq"
 )
 
@@ -25,6 +27,7 @@ type config struct {
 
 type application struct {
 	config config
+	logger *jsonlog.Logger
 }
 
 func main() {
@@ -32,16 +35,19 @@ func main() {
 
 	cfg.setFlags()
 
+	logger := jsonlog.New(os.Stdout, jsonlog.LevelInfo)
+
 	db, err := openDB(cfg)
 	if err != nil {
-		log.Println(err, nil)
+		logger.PrintFatal(err, nil)
 	}
 
 	defer db.Close()
-	log.Println("database connection pool established")
+	logger.PrintInfo("database connection pool established", nil)
 
 	app := &application{
 		config: cfg,
+		logger: logger,
 	}
 
 	srv := &http.Server{
@@ -50,9 +56,13 @@ func main() {
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
+		ErrorLog:     log.New(logger, "", 0),
 	}
 
-	log.Println("starting server")
+	logger.PrintInfo("starting server", map[string]string{
+		"env":  cfg.env,
+		"addr": srv.Addr,
+	})
 	err = srv.ListenAndServe()
 	log.Println(err)
 }

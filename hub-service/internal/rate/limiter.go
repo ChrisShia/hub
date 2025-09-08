@@ -1,4 +1,4 @@
-package main
+package rate
 
 import (
 	"fmt"
@@ -7,22 +7,22 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func NewRateLimiter(client *redis.Client, limit int, window time.Duration) *Limiter {
-	return &Limiter{
+func NewRateLimiter(client *redis.Client, limit int, window time.Duration) *L {
+	return &L{
 		client: client,
 		limit:  limit,
 		window: window,
 	}
 }
 
-type Limiter struct {
+type L struct {
 	client   *redis.Client
 	limit    int
 	window   time.Duration
 	disabled bool
 }
 
-func (rl *Limiter) Allow(ip string) (bool, error) {
+func (rl *L) Allow(ip string) (bool, error) {
 	if rl.disabled {
 		return true, nil
 	}

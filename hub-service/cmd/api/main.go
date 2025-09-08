@@ -11,6 +11,7 @@ import (
 
 	"github.com/ChrisShia/moviehub/internal/data"
 	"github.com/ChrisShia/moviehub/internal/jsonlog"
+	"github.com/ChrisShia/moviehub/internal/rate"
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
 )
@@ -37,7 +38,7 @@ type application struct {
 	config  config
 	logger  *jsonlog.Logger
 	models  data.Models
-	limiter *Limiter
+	limiter *rate.L
 }
 
 func main() {
@@ -82,16 +83,17 @@ func main() {
 		"addr":  srv.Addr,
 		"redis": cfg.redis.addr,
 	})
+
 	err = srv.ListenAndServe()
 	logger.PrintFatal(err, nil)
 }
 
-func redisClientLimiter(cfg config) (*Limiter, func(), error) {
+func redisClientLimiter(cfg config) (*rate.L, func(), error) {
 	client, err := establishRedisClient(cfg)
 	if err != nil {
 		return nil, nil, err
 	}
-	return NewRateLimiter(client, 2, time.Second), func() { client.Close() }, err
+	return rate.NewRateLimiter(client, 2, time.Second), func() { client.Close() }, err
 }
 
 func establishRedisClient(cfg config) (*redis.Client, error) {
@@ -100,6 +102,7 @@ func establishRedisClient(cfg config) (*redis.Client, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	client := redis.NewClient(opt)
 	return client, nil
 }

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+
+	"github.com/ChrisShia/moviehub/internal/rate"
 )
 
 func (app *application) recoverPanic(next http.Handler) http.Handler {
@@ -32,7 +34,7 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 	})
 }
 
-func requestLimit(r *http.Request, limiter *Limiter) (bool, error) {
+func requestLimit(r *http.Request, limiter *rate.L) (bool, error) {
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		return false, err

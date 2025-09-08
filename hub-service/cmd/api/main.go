@@ -11,6 +11,7 @@ import (
 
 	"github.com/ChrisShia/moviehub/internal/data"
 	"github.com/ChrisShia/moviehub/internal/jsonlog"
+	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
 )
 
@@ -25,12 +26,18 @@ type config struct {
 		maxIdleConns int
 		maxIdleTime  string
 	}
+	redis struct {
+		addr     string
+		disabled bool
+	}
+	test bool
 }
 
 type application struct {
-	config config
-	logger *jsonlog.Logger
-	models data.Models
+	config  config
+	logger  *jsonlog.Logger
+	models  data.Models
+	limiter *Limiter
 }
 
 func main() {
@@ -48,10 +55,17 @@ func main() {
 	defer db.Close()
 	logger.PrintInfo("database connection pool established", nil)
 
+	limiter, redisCloser, err := redisClientLimiter(cfg)
+	if err != nil {
+		logger.PrintFatal(err, nil)
+	}
+	defer redisCloser()
+
 	app := &application{
-		config: cfg,
-		logger: logger,
-		models: data.NewModels(db),
+		config:  cfg,
+		logger:  logger,
+		models:  data.NewModels(db),
+		limiter: limiter,
 	}
 
 	srv := &http.Server{
@@ -64,11 +78,30 @@ func main() {
 	}
 
 	logger.PrintInfo("starting server", map[string]string{
-		"env":  cfg.env,
-		"addr": srv.Addr,
+		"env":   cfg.env,
+		"addr":  srv.Addr,
+		"redis": cfg.redis.addr,
 	})
 	err = srv.ListenAndServe()
 	logger.PrintFatal(err, nil)
+}
+
+func redisClientLimiter(cfg config) (*Limiter, func(), error) {
+	client, err := establishRedisClient(cfg)
+	if err != nil {
+		return nil, nil, err
+	}
+	return NewRateLimiter(client, 2, time.Second), func() { client.Close() }, err
+}
+
+func establishRedisClient(cfg config) (*redis.Client, error) {
+	//TODO: maybe add repeated tries for establishing connection
+	opt, err := redis.ParseURL(cfg.redis.addr)
+	if err != nil {
+		return nil, err
+	}
+	client := redis.NewClient(opt)
+	return client, nil
 }
 
 func openDB(cfg config) (*sql.DB, error) {

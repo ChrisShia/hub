@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: 'postgres:14.2'
+    ports:
+      - "5432:5432"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      POSTGRES_USER: greenlight
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: greenlight
+    volumes:
+      - ./data/postgres/:/var/lib/postgresql/data/
+
+  hub-service:
+    build:
+      context: ./hub-service
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      PORT: 4000
+      POSTGRES_DSN: "postgres://greenlight:password@postgres:5432?sslmode=disable"
+      REDIS_URL: "redis://redis:6379"
+
+  redis:
+    image: 'redis:8.2-alpine'
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/var/lib/redis/data/

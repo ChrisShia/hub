@@ -28,8 +28,7 @@ type config struct {
 		maxIdleTime  string
 	}
 	redis struct {
-		addr     string
-		disabled bool
+		addr string
 	}
 	test bool
 }
@@ -58,7 +57,10 @@ func main() {
 
 	limiter, redisCloser, err := redisClientLimiter(cfg)
 	if err != nil {
-		logger.PrintFatal(err, nil)
+		logger.PrintFatal(err, map[string]string{
+			"env":   cfg.env,
+			"redis": cfg.redis.addr,
+		})
 	}
 	defer redisCloser()
 
@@ -89,15 +91,34 @@ func main() {
 }
 
 func redisClientLimiter(cfg config) (*rate.L, func(), error) {
+	counts := 0
+	for {
+		client, err := establlishRedisConnAndPing(cfg)
+		if err != nil {
+			counts++
+		} else {
+			return rate.NewRateLimiter(client, 2, time.Second), func() { client.Close() }, nil
+		}
+
+		if counts > 5 {
+			return nil, nil, err
+		}
+	}
+}
+
+func establlishRedisConnAndPing(cfg config) (*redis.Client, error) {
 	client, err := establishRedisClient(cfg)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
-	return rate.NewRateLimiter(client, 2, time.Second), func() { client.Close() }, err
+
+	if err = client.Ping().Err(); err != nil {
+		return nil, err
+	}
+	return client, nil
 }
 
 func establishRedisClient(cfg config) (*redis.Client, error) {
-	//TODO: maybe add repeated tries for establishing connection
 	opt, err := redis.ParseURL(cfg.redis.addr)
 	if err != nil {
 		return nil, err

@@ -52,6 +52,8 @@ func (l *Logger) PrintInfo(message string, properties map[string]string) {
 }
 
 func (l *Logger) PrintDebug(message string, properties map[string]string) {
+	//TODO: Maybe remove message for debugger..
+	//TODO: Should indicate the location of the debugger in respect to the code... line etc and properties
 	l.print(LevelDebug, message, properties)
 }
 

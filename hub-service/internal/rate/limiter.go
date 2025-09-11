@@ -41,8 +41,6 @@ func (rl *L) Allow(ip string) (bool, error) {
 		return false, err
 	}
 
-	fmt.Println("res:   ", res)
-
 	count, err := res[0].(*redis.IntCmd).Result()
 	if err != nil {
 		return false, err

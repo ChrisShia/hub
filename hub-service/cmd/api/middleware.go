@@ -26,6 +26,8 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 		if allow, err := requestLimit(r, app.limiter); !allow {
 			if err != nil {
 				app.serverErrorResponse(w, r, err)
+			} else {
+				app.rateLimitExceededResponse(w, r)
 			}
 			return
 		}

@@ -3,9 +3,6 @@ package main
 import (
 	"context"
 	"database/sql"
-	"fmt"
-	"log"
-	"net/http"
 	"os"
 	"time"
 
@@ -71,33 +68,20 @@ func main() {
 		limiter: limiter,
 	}
 
-	srv := &http.Server{
-		Addr:         fmt.Sprintf(":%d", cfg.port),
-		Handler:      app.routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		ErrorLog:     log.New(logger, "", 0),
+	err = app.serve()
+	if err != nil {
+		logger.PrintFatal(err, nil)
 	}
-
-	logger.PrintInfo("starting server", map[string]string{
-		"env":   cfg.env,
-		"addr":  srv.Addr,
-		"redis": cfg.redis.addr,
-	})
-
-	err = srv.ListenAndServe()
-	logger.PrintFatal(err, nil)
 }
 
 func redisClientLimiter(cfg config) (*rate.L, func(), error) {
 	counts := 0
 	for {
-		client, err := establlishRedisConnAndPing(cfg)
+		client, err := establishRedisConnAndPing(cfg)
 		if err != nil {
 			counts++
 		} else {
-			return rate.NewRateLimiter(client, 2, time.Second), func() { client.Close() }, nil
+			return rate.NewRateLimiter(client, 4, time.Second), func() { client.Close() }, nil
 		}
 
 		if counts > 5 {
@@ -106,7 +90,7 @@ func redisClientLimiter(cfg config) (*rate.L, func(), error) {
 	}
 }
 
-func establlishRedisConnAndPing(cfg config) (*redis.Client, error) {
+func establishRedisConnAndPing(cfg config) (*redis.Client, error) {
 	client, err := establishRedisClient(cfg)
 	if err != nil {
 		return nil, err

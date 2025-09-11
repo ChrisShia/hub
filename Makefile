@@ -17,7 +17,7 @@ hub_down:
 	
 hub: hub_down build_hub 
 	@echo "Starting new hub-service docker image..."
-	docker-compose up -d hub-service
+	docker-compose up --build -d hub-service
 	@echo "Docker image started!"
 
 down:

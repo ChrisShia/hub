@@ -23,6 +23,7 @@ type L struct {
 }
 
 func (rl *L) Allow(ip string) (bool, error) {
+	//TODO: clients outdated by a time period, lets say more than 3 minutes should be removed.
 	if rl.disabled {
 		return true, nil
 	}

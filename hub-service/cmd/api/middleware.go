@@ -5,7 +5,7 @@ import (
 	"net"
 	"net/http"
 
-	"github.com/ChrisShia/moviehub/internal/rate"
+	rl "github.com/ChrisShia/ratelimiter"
 )
 
 func (app *application) recoverPanic(next http.Handler) http.Handler {
@@ -23,7 +23,7 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 
 func (app *application) rateLimit(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if allow, err := requestLimit(r, app.limiter); !allow {
+		if allow, err := allowBasedOnLimiter(r, app.limiter); !allow {
 			if err != nil {
 				app.serverErrorResponse(w, r, err)
 			} else {
@@ -36,7 +36,7 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 	})
 }
 
-func requestLimit(r *http.Request, limiter *rate.L) (bool, error) {
+func allowBasedOnLimiter(r *http.Request, limiter *rl.Limiter) (bool, error) {
 	ip, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
 		return false, err

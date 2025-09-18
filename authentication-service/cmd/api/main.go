@@ -1,20 +1,17 @@
 package main
 
 import (
+	"authentication-service/internal/data"
 	"context"
 	"database/sql"
+	"flag"
 	"os"
 	"time"
 
 	"github.com/ChrisShia/jsonlog"
-	"github.com/ChrisShia/moviehub/internal/data"
-	"github.com/ChrisShia/moviehub/internal/rate"
 	rl "github.com/ChrisShia/ratelimiter"
 	"github.com/go-redis/redis"
-	_ "github.com/lib/pq"
 )
-
-const version = "1.0.0"
 
 type config struct {
 	port int
@@ -29,6 +26,17 @@ type config struct {
 		addr string
 	}
 	test bool
+}
+
+func (cfg *config) setFlags() {
+	flag.IntVar(&cfg.port, "port", 4000, "API server port")
+	flag.StringVar(&cfg.env, "env", "development", "Environment (development|staging|production)")
+	flag.StringVar(&cfg.db.dsn, "db-dsn", "", "PostgreSQL DSN, postgres://user:password@host/db?sslmode=disable")
+	flag.IntVar(&cfg.db.maxOpenConns, "db-max-open-conns", 25, "PostgreSQL max open connections")
+	flag.IntVar(&cfg.db.maxIdleConns, "db-max-idle-conns", 25, "PostgreSQL max idle connections")
+	flag.StringVar(&cfg.db.maxIdleTime, "db-max-idle-time", "15m", "PostgreSQL max connection idle time")
+	flag.StringVar(&cfg.redis.addr, "redis", "", "Redis address, redis://<user>:<pass>@host:port/<db>")
+	flag.Parse()
 }
 
 type application struct {
@@ -49,8 +57,8 @@ func main() {
 	if err != nil {
 		logger.PrintFatal(err, nil)
 	}
-
 	defer db.Close()
+
 	logger.PrintInfo("database connection pool established", nil)
 
 	limiter, redisCloser, err := redisClientLimiter(cfg)
@@ -73,44 +81,6 @@ func main() {
 	if err != nil {
 		logger.PrintFatal(err, nil)
 	}
-}
-
-func redisClientLimiter(cfg config) (*rl.Limiter, func(), error) {
-	counts := 0
-	for {
-		client, err := establishRedisConnAndPing(cfg)
-		if err != nil {
-			counts++
-		} else {
-			return rate.RedisLimiter(client, 4, time.Second), func() { client.Close() }, nil
-		}
-
-		if counts > 5 {
-			return nil, nil, err
-		}
-	}
-}
-
-func establishRedisConnAndPing(cfg config) (*redis.Client, error) {
-	client, err := redisClient(cfg)
-	if err != nil {
-		return nil, err
-	}
-
-	if err = client.Ping().Err(); err != nil {
-		return nil, err
-	}
-	return client, nil
-}
-
-func redisClient(cfg config) (*redis.Client, error) {
-	opt, err := redis.ParseURL(cfg.redis.addr)
-	if err != nil {
-		return nil, err
-	}
-
-	client := redis.NewClient(opt)
-	return client, nil
 }
 
 func openDB(cfg config) (*sql.DB, error) {
@@ -139,4 +109,42 @@ func openDB(cfg config) (*sql.DB, error) {
 	}
 
 	return db, nil
+}
+
+func redisClientLimiter(cfg config) (*rl.Limiter, func(), error) {
+	counts := 0
+	for {
+		client, err := establishRedisConnAndPing(cfg)
+		if err != nil {
+			counts++
+		} else {
+			return rl.NewRedisLimiter(client, 4, time.Second), func() { client.Close() }, nil
+		}
+
+		if counts > 5 {
+			return nil, nil, err
+		}
+	}
+}
+
+func establishRedisConnAndPing(cfg config) (*redis.Client, error) {
+	client, err := redisClient(cfg)
+	if err != nil {
+		return nil, err
+	}
+
+	if err = client.Ping().Err(); err != nil {
+		return nil, err
+	}
+	return client, nil
+}
+
+func redisClient(cfg config) (*redis.Client, error) {
+	opt, err := redis.ParseURL(cfg.redis.addr)
+	if err != nil {
+		return nil, err
+	}
+
+	client := redis.NewClient(opt)
+	return client, nil
 }

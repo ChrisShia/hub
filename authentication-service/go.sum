@@ -1,0 +1,12 @@
+github.com/ChrisShia/jsonlog v0.0.0-20250917185647-41a88bbe185a h1:KZMNjLdwLrdTYynpLTd66j+zUJMtj1JbeLx3MkfdcL4=
+github.com/ChrisShia/jsonlog v0.0.0-20250917185647-41a88bbe185a/go.mod h1:VSixOX+tH+9zAAboJYVs+eVuIYPpVcDtpSDptJpaobQ=
+github.com/ChrisShia/ratelimiter v0.0.0-20250918190247-b23c5226d9d2 h1:DSOwlRJ3/etI3R1Nn2nxkA3qhXzRmyL56Tx/KbRLYDQ=
+github.com/ChrisShia/ratelimiter v0.0.0-20250918190247-b23c5226d9d2/go.mod h1:CSGDuqKk33ya+sfkwMF5JMhsFjracOr0NoSBCenYzqQ=
+github.com/go-redis/redis v6.15.9+incompatible h1:K0pv1D7EQUjfyoMql+r/jZqCLizCGKFlFgcHWWmHQjg=
+github.com/go-redis/redis v6.15.9+incompatible/go.mod h1:NAIEuMOZ/fxfXJIrKDQDz8wamY7mA7PouImQ2Jvg6kA=
+github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=
+github.com/julienschmidt/httprouter v1.3.0/go.mod h1:JR6WtHb+2LUe8TCKY3cZOxFyyO8IZAc4RVcycCCAKdM=
+github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
+github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
+golang.org/x/crypto v0.42.0 h1:chiH31gIWm57EkTXpwnqf8qeuMUi0yekh6mT2AvFlqI=
+golang.org/x/crypto v0.42.0/go.mod h1:4+rDnOTJhQCx2q7/j6rAN5XDw8kPjeaXEUR2eL94ix8=

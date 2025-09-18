@@ -1,0 +1,22 @@
+INSERT INTO users (name, email, password, activated, version)
+VALUES
+    ('Alice Example',  'alice@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Bob Tester',     'bob@example.com',    '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Charlie Dev',    'charlie@example.com','$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Dana QA',        'dana@example.com',   '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Eve Hacker',     'eve@example.com',    '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Frank Admin',    'frank@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Grace User',     'grace@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Heidi Ops',      'heidi@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Ivan Engineer',  'ivan@example.com',   '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Judy Analyst',   'judy@example.com',   '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Karl DevOps',    'karl@example.com',   '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Laura QA',       'laura@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Mallory Security','mallory@example.com','$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Niaj Support',   'niaj@example.com',   '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Olivia PM',      'olivia@example.com', '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Peggy UX',       'peggy@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Quinn Data',     'quinn@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Rupert DBA',     'rupert@example.com', '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Sybil Architect','sybil@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
+    ('Trent Tester',   'trent@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1);

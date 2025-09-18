@@ -1,0 +1,22 @@
+INSERT INTO movies (title, year, runtime, genres, version)
+VALUES
+    ('The Matrix', 1999, 136, ARRAY['Action', 'Sci-Fi'], 1),
+    ('Inception', 2010, 148, ARRAY['Action', 'Sci-Fi', 'Thriller'], 1),
+    ('The Dark Knight', 2008, 152, ARRAY['Action', 'Crime', 'Drama'], 1),
+    ('Interstellar', 2014, 169, ARRAY['Adventure', 'Drama', 'Sci-Fi'], 1),
+    ('Parasite', 2019, 132, ARRAY['Drama', 'Thriller'], 1),
+    ('Fight Club', 1995, 139, ARRAY['Drama', 'Mystery'], 1),
+    ('Pulp Fiction', 1994, 154, ARRAY['Crime', 'Drama'], 1),
+    ('Forrest Gump', 1994, 142, ARRAY['Comedy', 'Drama'], 1),
+    ('The Shawshank Redemption', 1994, 142, ARRAY['Adventure', 'Drama'], 1),
+    ('Gladiator', 2000, 155, ARRAY['Action', 'Adventure'], 1),
+    ('Whiplash', 2014, 106, ARRAY['Drama', 'Music'], 1),
+    ('Mad Max: Fury Road', 2015, 120, ARRAY['Action', 'Adventure', 'Sci-Fi'], 1),
+    ('The Social Network', 2010, 120, ARRAY['Biography', 'Drama'], 1),
+    ('Joker', 2019, 122, ARRAY['Crime', 'Thriller'], 1),
+    ('Dune', 2021, 155, ARRAY['Adventure', 'Sci-Fi'], 1),
+    ('The Prestige', 2006, 130, ARRAY['Mystery', 'Thriller'], 1),
+    ('Avengers: Endgame', 2019, 181, ARRAY['Action', 'Fantasy'], 1),
+    ('The Godfather', 1972, 175, ARRAY['Crime', 'Drama'], 1),
+    ('The Lion King', 1994, 88, ARRAY['Animation', 'Family'], 1),
+    ('The Grand Budapest Hotel', 2014, 99, ARRAY['Comedy', 'Adventure'], 1);

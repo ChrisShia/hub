@@ -1,9 +1,11 @@
-.PHONY: help 
+.PHONY: help
 help:
 	@echo "Usage:"
 	@sed -n 's/^##//p' ${MAKEFILE_LIST} | column -t -s ':' | sed -e 's/^/ /'
 
-## up_build: Stop all docker images (if running), start them again, building them if necessary and start them up.
+# UNIVERSE ###
+
+## up/build: Stop all docker images (if running), build them (if necessary) and start them up.
 .PHONY: up/build
 up/build: hub/build
 	@echo "Stopping docker images (if running...)"
@@ -26,9 +28,12 @@ up:
 	docker-compose up -d
 	@echo "Docker images started!"
 
+
+# HUB-SERVICE ###
+
 ## hub/build/up: Execute hub/down, hub/build, build hub image again and start container.
 .PHONY: hub/build/up
-hub/build/up: hub/down hub/build 
+hub/build/up: hub/down hub/build
 	@echo "Starting new hub-service docker image..."
 	docker-compose up --build -d hub-service
 	@echo "Docker image started!"
@@ -53,3 +58,11 @@ hub/up:
 	@echo "Starting hub-service docker image"
 	docker-compose up -d hub-service
 	@echo "Docker image started!"
+
+
+# MIGRATIONS ###
+
+.PHONY: db/migrate/up
+db/migrate/up:
+	@echo "Running up migrations..."
+	migrate -path ./migrations -database postgres://greenlight:password@postgres:5432?sslmode=disable up

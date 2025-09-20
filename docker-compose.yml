@@ -7,9 +7,9 @@ services:
       mode: replicated
       replicas: 1
     environment:
-      POSTGRES_USER: greenlight
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: greenlight
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_DB
     volumes:
       - ./db-data/postgres:/var/lib/postgresql/data/
 
@@ -24,6 +24,8 @@ services:
     build:
       context: ./hub-service
       dockerfile: Dockerfile
+    depends_on:
+      - postgres
     ports:
       - "4000:4000"
     restart: always
@@ -32,5 +34,22 @@ services:
       replicas: 1
     environment:
       PORT: 4000
-      POSTGRES_DSN: "postgres://greenlight:password@postgres:5432?sslmode=disable"
+      POSTGRES_DSN: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=${DB_SSL_MODE}"
+      REDIS_URL: "redis://redis:6379"
+
+  authentication-service:
+    build:
+      context: ./authentication-service
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "4001:4001"
+    restart: always
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      PORT: 4001
+      POSTGRES_DSN: "postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=${DB_SSL_MODE}"
       REDIS_URL: "redis://redis:6379"

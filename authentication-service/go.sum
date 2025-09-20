@@ -2,6 +2,12 @@ github.com/ChrisShia/jsonlog v0.0.0-20250917185647-41a88bbe185a h1:KZMNjLdwLrdTY
 github.com/ChrisShia/jsonlog v0.0.0-20250917185647-41a88bbe185a/go.mod h1:VSixOX+tH+9zAAboJYVs+eVuIYPpVcDtpSDptJpaobQ=
 github.com/ChrisShia/ratelimiter v0.0.0-20250918190247-b23c5226d9d2 h1:DSOwlRJ3/etI3R1Nn2nxkA3qhXzRmyL56Tx/KbRLYDQ=
 github.com/ChrisShia/ratelimiter v0.0.0-20250918190247-b23c5226d9d2/go.mod h1:CSGDuqKk33ya+sfkwMF5JMhsFjracOr0NoSBCenYzqQ=
+github.com/ChrisShia/ratelimiter v0.0.0-20250918191745-fea144f19252 h1:mw46yNnXZg0zCSxzbAvg81AXDs/Vr1t7l6C6Zt8WFS4=
+github.com/ChrisShia/ratelimiter v0.0.0-20250918191745-fea144f19252/go.mod h1:CSGDuqKk33ya+sfkwMF5JMhsFjracOr0NoSBCenYzqQ=
+github.com/ChrisShia/serve v0.0.0-20250919131623-8aef5b86403f h1:iJVzbM4aXYvMzyGQLl18IzrfOPU8TaAYW5xann/E3+Q=
+github.com/ChrisShia/serve v0.0.0-20250919131623-8aef5b86403f/go.mod h1:0o2J3ilDQ0o9AjnXKJ+BnebJKhz0qzKeE5hCvYUTuHI=
+github.com/ChrisShia/serve v0.0.0-20250919170856-f595f30b1bb4 h1:b3hpuxzJRQahK5U85l1UNlt8hVrhYLeE2vQK71eBnsY=
+github.com/ChrisShia/serve v0.0.0-20250919170856-f595f30b1bb4/go.mod h1:0o2J3ilDQ0o9AjnXKJ+BnebJKhz0qzKeE5hCvYUTuHI=
 github.com/go-redis/redis v6.15.9+incompatible h1:K0pv1D7EQUjfyoMql+r/jZqCLizCGKFlFgcHWWmHQjg=
 github.com/go-redis/redis v6.15.9+incompatible/go.mod h1:NAIEuMOZ/fxfXJIrKDQDz8wamY7mA7PouImQ2Jvg6kA=
 github.com/julienschmidt/httprouter v1.3.0 h1:U0609e9tgbseu3rBINet9P48AI/D3oJs4dN7jwJOQ1U=

@@ -1,65 +1,33 @@
 package main
 
 import (
-	"context"
-	"errors"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-	"time"
+
+	srv "github.com/ChrisShia/serve"
 )
 
 func (app *application) serve() error {
-	server := http.Server{
-		Addr:         fmt.Sprintf(":%d", app.config.port),
-		Handler:      app.routes(),
-		IdleTimeout:  time.Minute,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 30 * time.Second,
-		ErrorLog:     log.New(app.logger, "", 0),
-	}
+	return srv.ListenAndServe(app, app.config.port)
+}
 
-	shutdownError := make(chan error)
-
-	go func() {
-		quit := make(chan os.Signal, 1)
-
-		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
-
-		s := <-quit
-
-		app.logger.PrintInfo("shutting down server", map[string]string{
-			"signal": s.String(),
-		})
-
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-		defer cancel()
-
-		shutdownError <- server.Shutdown(ctx)
-	}()
-
-	app.logger.PrintInfo("starting server", map[string]string{
-		"addr":  server.Addr,
+func (app *application) LogStartUp() {
+	app.logger.PrintInfo("starting application server", map[string]string{
+		"port":  fmt.Sprintf(":%d", app.config.port),
 		"env":   app.config.env,
 		"redis": app.config.redis.addr,
 	})
+}
 
-	err := server.ListenAndServe()
-	if !errors.Is(err, http.ErrServerClosed) {
-		return err
-	}
-
-	err = <-shutdownError
-	if err != nil {
-		return err
-	}
-
+func (app *application) LogShutdown() {
 	app.logger.PrintInfo("stopped server", map[string]string{
-		"addr": server.Addr,
+		"addr": fmt.Sprintf(":%d", app.config.port),
 	})
+}
 
-	return nil
+func (app *application) PrintInfo(msg string, properties map[string]string) {
+	app.logger.PrintInfo(msg, properties)
+}
+
+func (app *application) Write(p []byte) (n int, err error) {
+	return app.logger.Write(p)
 }

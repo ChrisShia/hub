@@ -11,6 +11,7 @@ require (
 require (
 	github.com/ChrisShia/jsonlog v0.0.0-20250917185647-41a88bbe185a // indirect
 	github.com/ChrisShia/ratelimiter v0.0.0-20250918190247-b23c5226d9d2 // indirect
+	github.com/ChrisShia/serve v0.0.0-20250919131623-8aef5b86403f // indirect
 	github.com/alicebob/miniredis/v2 v2.35.0 // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.38.2 // indirect

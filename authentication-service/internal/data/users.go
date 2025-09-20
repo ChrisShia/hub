@@ -26,7 +26,7 @@ func (um *UserModel) Insert(user *User) error {
 	if err != nil {
 		switch {
 		case err.Error() == `pq: duplicate key value violates unique constraint "users_email_key"`:
-			return ErrDublicateEmail
+			return ErrDuplicateEmail
 		default:
 			return err
 		}
@@ -58,7 +58,7 @@ func (um *UserModel) Update(user *User) error {
 	if err != nil {
 		switch {
 		case err.Error() == `pq: duplicate key value violates unique constraint "users_email_key"`:
-			return ErrDublicateEmail
+			return ErrDuplicateEmail
 		case errors.Is(err, sql.ErrNoRows):
 			return ErrEditConflict
 		default:

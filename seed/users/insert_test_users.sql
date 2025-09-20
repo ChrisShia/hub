@@ -1,4 +1,4 @@
-INSERT INTO users (name, email, password, activated, version)
+INSERT INTO users (name, email, password_hash, activated, version)
 VALUES
     ('Alice Example',  'alice@example.com',  '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
     ('Bob Tester',     'bob@example.com',    '$2b$12$FBJIhtxecbScB7vbOyFj/.yQkKJto.k/ElVlab0OVDkj9FzHFWmCy', TRUE, 1),
